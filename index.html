@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>キーンけし — 教室の高い音をはかって、打ち消してみる</title>
+  <meta name="description" content="スピーカーから漏れる「キーン」という高い音を、ノートPCのマイクで周波数まで測り、打ち消し音を試し、先生に渡す報告メモを作ります。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=JetBrains+Mono:wght@500;700&display=swap" />
+</head>
+<body>
+  <header class="top">
+    <h1>キーン<span>けし</span></h1>
+    <p class="lead">教室のスピーカーから漏れる「キーン」をはかって、打ち消してみる。</p>
+  </header>
+
+  <main>
+    <section class="card" id="sec-measure">
+      <div class="sec-head"><span class="num">1</span><h2>はかる</h2></div>
+      <p class="hint">MacBookを机に置いたまま、10秒ほど静かに聞かせてください。音声は外に送りません。</p>
+      <button class="btn primary" id="btn-mic">マイクで聞く</button>
+      <div class="scope" id="scope" hidden>
+        <canvas id="waterfall"></canvas>
+        <canvas id="spectrum"></canvas>
+        <div class="axis" id="axis"></div>
+      </div>
+      <div id="result" class="result" hidden></div>
+    </section>
+
+    <section class="card" id="sec-cancel">
+      <div class="sec-head"><span class="num">2</span><h2>けしてみる</h2></div>
+      <p class="hint">選んだ音とちょうど逆向きの音をスピーカーから出し、マイクで聞きながら合わせ続けます。</p>
+      <div class="warn">
+        <b>先に知っておいてほしいこと</b>
+        打ち消しで静かになるのは「波長の1/10」くらいの範囲だけです。高い音ほど狭く、<span id="zone-text">15kHzならマイクのまわり約2mm</span>。
+        耳の位置では静かにならず、場所によってはかえって大きく聞こえることもあります。下の数字は「マイクの位置でどれだけ消えたか」です。
+      </div>
+      <button class="btn" id="btn-cancel" disabled>まず「はかる」で音を選んでください</button>
+      <div id="cancel-live" class="live" hidden>
+        <div class="phase" id="phase">聞き取り中…</div>
+        <div class="big"><span id="red">—</span><small>dB 下がった(マイクの位置)</small></div>
+        <canvas id="red-graph"></canvas>
+        <div class="meta" id="cancel-meta"></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-real">
+      <div class="sec-head"><span class="num">3</span><h2>ほんとうに効く手</h2></div>
+      <ol class="real">
+        <li><b>音の出どころで止める。</b>多くはアンプの電源が入りっぱなし・入力の音量が上がったまま。先生か事務室に伝えれば、たいていすぐ止まります。下の報告メモをそのまま渡せます。</li>
+        <li><b>耳せん。</b>高い音は低い音よりずっと防ぎやすく、スポンジの耳せんでも大きく下がります(打ち消しが得意なのは逆に低い音)。</li>
+      </ol>
+      <label class="place">教室名 <input id="place" placeholder="例: 2年3組" maxlength="20" /></label>
+      <textarea id="report" readonly placeholder="「はかる」で音を見つけると、ここに報告メモができます"></textarea>
+      <button class="btn" id="btn-copy" disabled>メモをコピー</button>
+    </section>
+  </main>
+
+  <footer class="foot">打ち消しの中身は単一周波数の適応フィルタ(複素LMS)。音声は端末の中だけで処理しています。</footer>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
